@@ -1,4 +1,4 @@
-
+import org.junit.jupiter.api.Test;
 import cache.base.interfaces.Cache;
 import cache.base.interfaces.CacheSetter;
 import cache.partitions.CacheSetterSplitter;
@@ -10,17 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
-public class TestClass {
+class JU1 {
 
-	public static void main(String[] args) {
-		System.out.println("Test run");
-		new TestClass().testSetData1();
-		new TestClass().testSetData2();
-		new TestClass().testSetData3();
-	}
-	
+    @Test
     public void testSetData1() {
-        System.out.println("testSetData1");
+        System.out.println("setData");
         Date date = new Date();
         long id = date.getTime();
         RedisTestData data = new RedisTestData();
@@ -34,6 +28,52 @@ public class TestClass {
                 new DataSerializerJson<Object>()
         );
          instance.setData(new Long(id).toString(), data);
+    }
+
+    @Test
+    public void testSetData2() {
+        System.out.println("setData");
+        Date date = new Date();
+        long id = date.getTime();
+        RedisTestData data = new RedisTestData();
+        data.intData = id;
+        data.dateData = date;
+
+//        Cache.Key key = new Cache.Key();
+//        key.outerKey = "testSetData:2:"+id;
+//        key.innerKeys = new String[]{"date", "int"};
+        CacheSetter<RedisTestData> instance = new RedisCache<>(
+                "localhost", 6379,
+                new CacheSetterSplitterRedisTestData(),
+                null,
+                new DataSerializerJson<RedisTestData>()
+        );
+        instance.setData(Long.toString(id), data);
+    }
+
+    @Test
+    public void testSetData3() {
+        System.out.println("setData");
+
+        Date date = new Date();
+        long id = date.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String data = sdf.format(date);
+
+        CacheSetter<String> instance = new RedisCache<>(
+                "localhost", 6379,
+                new CacheSetterSplitterRedisStringData("string:"),
+                null,
+                new DataSerializerJson<String>()
+        );
+        instance.setData(Long.toString(id), data);
+    }
+
+    public class RedisTestData {
+
+        public Long intData;
+        public Date dateData;
+
     }
 
     public class CacheSetterSplitterSimpleObj implements CacheSetterSplitter<Object> {
@@ -67,49 +107,6 @@ public class TestClass {
         }
 
     }
-    
-    public void testSetData2() {
-        System.out.println("testSetData2");
-        Date date = new Date();
-        long id = date.getTime();
-        RedisTestData data = new RedisTestData();
-        data.intData = id;
-        data.dateData = date;
-
-//        Cache.Key key = new Cache.Key();
-//        key.outerKey = "testSetData:2:"+id;
-//        key.innerKeys = new String[]{"date", "int"};
-        CacheSetter<RedisTestData> instance = new RedisCache<RedisTestData>(
-                "localhost", 6379,
-                new CacheSetterSplitterRedisTestData(),
-                null,
-                new DataSerializerJson<RedisTestData>()
-        );
-        instance.setData(Long.toString(id), data);
-    }
-    public void testSetData3() {
-        System.out.println("testSetData3");
-
-        Date date = new Date();
-        long id = date.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String data = sdf.format(date);
-
-        CacheSetter<String> instance = new RedisCache<String>(
-                "localhost", 6379,
-                new CacheSetterSplitterRedisStringData("string:"),
-                null,
-                new DataSerializerJson<String>()
-        );
-        instance.setData(Long.toString(id), data);
-    }
-
-    public class RedisTestData {
-
-        public Long intData;
-        public Date dateData;
-
-    }
-	
 
 }
+
