@@ -14,7 +14,7 @@ class JU1 {
 
     @Test
     public void testSetData1() {
-        System.out.println("setData");
+        System.out.println("testSetData:1");
         Date date = new Date();
         long id = date.getTime();
         RedisTestData data = new RedisTestData();
@@ -32,7 +32,7 @@ class JU1 {
 
     @Test
     public void testSetData2() {
-        System.out.println("setData");
+        System.out.println("testSetData:2");
         Date date = new Date();
         long id = date.getTime();
         RedisTestData data = new RedisTestData();
@@ -53,7 +53,7 @@ class JU1 {
 
     @Test
     public void testSetData3() {
-        System.out.println("setData");
+        System.out.println("testSetData:3");
 
         Date date = new Date();
         long id = date.getTime();
